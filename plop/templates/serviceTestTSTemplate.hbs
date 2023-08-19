@@ -1,0 +1,43 @@
+import React from 'react'
+import { QueryClientProvider, QueryClient } from 'react-query'
+import { renderHook } from '@testing-library/react-hooks'
+import { useGet{{properCase name}}DataById } from './use{{properCase name}}'
+
+import INITIAL_APP_STATE from 'storage/state/appState'
+import data{{camelCase name}} from '../../../mockServer/data/{{camelCase name}}Data.json'
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+    },
+  },
+})
+
+beforeAll(() => {
+  jest.mock('axios', () => {
+    const mAxiosInstance = {
+      get: jest.fn().mockResolvedValue({
+        data: data{{camelCase name}},
+      }),
+    }
+    return {
+      create: jest.fn(() => mAxiosInstance),
+    }
+  })
+})
+
+test('customHook returns correct data', async () => {
+  const wrapper = ({ children }: any) => (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  )
+
+  const { result, waitFor } = renderHook(
+    () => useGet{{properCase name}}DataById(INITIAL_APP_STATE, 1),
+    { wrapper },
+  )
+
+  await waitFor(() => result.current.isSuccess)
+
+  expect(result.current.data).toEqual(data{{camelCase name}}.{{camelCase name}}[0])
+})

@@ -1,0 +1,23 @@
+import { useQuery } from 'react-query'
+import { getAxiosInstance } from 'services/axios'
+import { queryKeys } from '../reactQuery/queryKeys'
+
+export async function get{{properCase name}}DataById(
+  appState: any,
+  {{camelCase name}}Id: number,
+): Promise<Response> {
+  const { data } = await getAxiosInstance().get(
+    `/{{camelCase name}}/${ {{camelCase name}}Id }`,
+  )
+  return data
+}
+
+export function useGet{{properCase name}}DataById(
+  appState: any,
+  {{camelCase name}}Id: number,
+): any | undefined {
+  const response  = useQuery([queryKeys.{{camelCase name}}, {{camelCase name}}Id], () =>
+    get{{properCase name}}DataById(appState, {{camelCase name}}Id),
+  )
+  return response
+}
